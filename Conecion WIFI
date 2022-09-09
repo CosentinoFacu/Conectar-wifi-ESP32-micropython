@@ -1,0 +1,39 @@
+'''
+Objetivo: Conectarme a cualquier red wifi
+programador: Facundo Cosentino
+Fecha: 8/9/2022
+'''
+
+import time
+import network
+import machine as m
+
+SSID = "Tu red WIFI"
+PASSWORD = "Tu contraseña"
+
+def conectar():
+    print('Buscando red..')
+    sta_if = network.WLAN(network.STA_IF)
+    sta_if.active(True)
+
+    lista=sta_if.scan()
+    time.sleep(2)
+    for i in range(len(lista)):
+        reg=lista[i]
+        red=str(reg[0])
+        red=red.replace("'", '')
+        red=red.replace("b", '')
+        if red == SSID:
+            print('Red encontrada')
+            sta_if.connect(SSID, PASSWORD)
+            while not sta_if.isconnected():
+                print('Conectando..')
+                time.sleep(1)
+                pass
+            print("Conectado a red:", SSID)
+            time.sleep(3)
+            break
+        if i == (len(lista)-1):
+            print('Red no encontrada')
+
+conectar()
